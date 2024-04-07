@@ -11,5 +11,9 @@ const userRouter = (0, express_1.Router)();
 userRouter.get("/", authMidleware_1.default.verifyToken, userContronller_1.getListUser);
 //get User
 userRouter.get("/:id", authMidleware_1.default.verifyToken, userContronller_1.getUser);
+//delete User
+userRouter.delete("/:id", authMidleware_1.default.verifyTokenAdminAuth, userContronller_1.deleteUser);
+//upadate User 
+userRouter.put("/:id", authMidleware_1.default.verifyTokenAdminAuth, userContronller_1.updateUser);
 exports.default = userRouter;
 //# sourceMappingURL=userRouter.js.map

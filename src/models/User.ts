@@ -37,4 +37,4 @@ const userSchema = new Schema <IUser>({
 userSchema.index({username:1,email:1},{unique:true});
 
 
-export default model<IUser>('User', userSchema);
+export default model<IUser>('User', userSchema);//todo

@@ -23,8 +23,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUser = exports.getUser = exports.getListUser = void 0;
+exports.updateUser = exports.deleteUser = exports.getUser = exports.getListUser = void 0;
 const User_1 = __importDefault(require("../models/User"));
+const bcrypt_1 = __importDefault(require("bcrypt"));
 const getListUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const listUser = yield User_1.default.find();
@@ -50,15 +51,48 @@ const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.getUser = getUser;
-const deleteUser = (req, res) => {
+const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const id = req.params.id;
-        User_1.default.deleteOne({ _id: id });
+        yield User_1.default.deleteOne({ _id: id });
         return res.status(200).json({ sccess: true });
     }
     catch (err) {
         return res.status(500).json(err);
     }
-};
+});
 exports.deleteUser = deleteUser;
+const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const salt = yield bcrypt_1.default.genSalt(10);
+        const hashed = yield bcrypt_1.default.hash(req.body.password, salt);
+        const upuser = yield new User_1.default({
+            username: req.body.username,
+            email: req.body.email,
+            password: hashed,
+            _id: req.params.id
+        });
+        const _id = req.params.id;
+        try {
+            // Cập nhật thông tin người dùng dựa trên ID
+            const updatedUser = yield User_1.default.findByIdAndUpdate(_id, // ID của người dùng cần cập nhật
+            upuser, // Dữ liệu cập nhật
+            { new: true } // Tùy chọn để trả về người dùng đã được cập nhật
+            );
+            if (updatedUser) {
+                return res.status(200).json(updatedUser);
+            }
+            else {
+                return res.status(404).send('Không tìm thấy người dùng để cập nhật');
+            }
+        }
+        catch (error) {
+            return res.status(500).json(error);
+        }
+    }
+    catch (error) {
+        return res.status(500).json(error);
+    }
+});
+exports.updateUser = updateUser;
 //# sourceMappingURL=userContronller.js.map

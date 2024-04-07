@@ -1,6 +1,6 @@
 import User from "../models/User";
 import bcrypt from "bcrypt";
-import { Request,Response } from "express";
+import { Request,Response } from "express"; //todo swapter
 export const getListUser = async (req:Request,res:Response) =>{
     try {
         const listUser = await User.find();

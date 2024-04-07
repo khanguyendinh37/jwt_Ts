@@ -59,7 +59,7 @@ export const loginUser = async (req: Request , res: Response) =>{
                     username : user.username,
                     token : refreshToken
                 })
-                 token.save();
+                 token.save();//todo
             }
             //save refrech Token in cookies
             res.cookie("refreshToken",refreshToken,{
@@ -89,7 +89,7 @@ export const resetToken = async (req:Request ,res :Response) =>{
        
          
          if(!refreshToken) return res.status(401).json("you're not authentiacated");
-         console.log(token);
+        
          if(!token){
             return res.status(403).json("refresh token is not valid");
          }  
@@ -112,7 +112,7 @@ export const resetToken = async (req:Request ,res :Response) =>{
                 secure : false,// set it to True  when go to live
                 path:"/",
                 sameSite:"strict"
-            });
+            });//todo
             
             res.status(200).json({accessToken:newAccessToken});
         })
